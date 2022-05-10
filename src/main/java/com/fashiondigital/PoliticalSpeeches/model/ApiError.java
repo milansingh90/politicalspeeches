@@ -1,6 +1,5 @@
 package com.fashiondigital.PoliticalSpeeches.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ApiError {
     private String message;
-
     public ApiError( String message ) {
         this.message = message;
     }

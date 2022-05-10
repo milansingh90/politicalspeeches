@@ -3,7 +3,6 @@ package com.fashiondigital.PoliticalSpeeches.repository;
 import com.fashiondigital.PoliticalSpeeches.model.PoliticalInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -36,12 +35,8 @@ public class PoliticalInformationRepository {
                     " GROUP BY speakerName " +
                     " ORDER BY COUNT(speakerName) DESC " +
                     " LIMIT 1", namedParameters, String.class);
-            return Optional.of(name);
-        }catch(DuplicateKeyException e) {
-            return Optional.empty();
+            return Optional.ofNullable(name);
         }catch (DataAccessException e){
-            return Optional.empty();
-        }catch (Exception e){
             return Optional.empty();
         }
 
@@ -55,12 +50,8 @@ public class PoliticalInformationRepository {
                     " GROUP BY speakerName, speakerTopic " +
                     " ORDER BY COUNT(speakerName) DESC " +
                     " LIMIT 1", namedParameters, String.class);
-            return Optional.of(name);
-        }catch(DuplicateKeyException e) {
-            return Optional.empty();
+            return Optional.ofNullable(name);
         }catch (DataAccessException e){
-            return Optional.empty();
-        }catch (Exception e){
             return Optional.empty();
         }
 
@@ -72,12 +63,8 @@ public class PoliticalInformationRepository {
             String name = namedParameterJdbcTemplate.queryForObject("SELECT speakerName FROM PoliticalInformation " +
                     " ORDER BY numberOfWordsSpoken " +
                     " LIMIT 1", namedParameters, String.class);
-            return Optional.of(name);
-        } catch(DuplicateKeyException e) {
-            return Optional.empty();
-        }catch (DataAccessException e){
-            return Optional.empty();
-        }catch (Exception e){
+            return Optional.ofNullable(name);
+        } catch (DataAccessException e){
             return Optional.empty();
         }
     }
@@ -97,8 +84,7 @@ public class PoliticalInformationRepository {
 
         try{
             String sql = "INSERT INTO PoliticalInformation VALUES (:speakerName, :speakerTopic, :dateOfSpeech, :numberOfWordsSpoken)";
-            int[] count = namedParameterJdbcTemplate.batchUpdate(sql, params.toArray(MapSqlParameterSource[]::new));
-            return count;
+            return namedParameterJdbcTemplate.batchUpdate(sql, params.toArray(MapSqlParameterSource[]::new));
         }catch (Exception e){
             return new int[]{0};
         }

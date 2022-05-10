@@ -7,7 +7,7 @@ Feature: Analytics information on political speeches can be retrieved
 
     Examples:
       | urls                                                                      | Scenarios                                   |
-      | url=http://localhost:9095/fileHosting/politicalSpeech.csv                 | Valid url with one input url is passed     |
+      | url=http://localhost:9096/fileHosting/politicalSpeech.csv                 | Valid url with one input url is passed     |
 
 
   Scenario Outline: Client makes call to GET using url
@@ -17,4 +17,4 @@ Feature: Analytics information on political speeches can be retrieved
 
     Examples:
       | urls                                                                          | Scenarios                                   |
-      | url=http://localhost:9095/fileHosting/politicalSpeechInvalid.csv              | Valid url with invalid input passed     |
+      | url=http://localhost:9096/fileHosting/politicalSpeechInvalid.csv              | Valid url with invalid input passed     |

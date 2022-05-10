@@ -21,7 +21,7 @@ public class PoliticialSpeechesClient {
     private final static String BASE_URI = "http://localhost";
     private final static String ANALYSIS_ENDPOINT = "/analysis/csv";
 
-    private final static String WIREMOCK_PORT = System.getProperty("wiremock.port", "9095");
+    private final static String WIREMOCK_PORT = System.getProperty("wiremock.port", "9096");
 
     @LocalServerPort
     private int port;
