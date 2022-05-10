@@ -41,6 +41,7 @@ public class PoliticalSpeechService {
                         .build();
                 return csvToBean.stream().collect(Collectors.toList());
             });
+
             int[] countInsertedRecords;
             if (politicalInformationList != null) {
 
@@ -49,7 +50,6 @@ public class PoliticalSpeechService {
                     if(countInsertedRecords.length < 1)
                         throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Empty input file");
                 } else
-                    //Add error messages for incorrect type of Data
                     throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Invalid data in input file");
             }else
                 throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Input file is empty");
@@ -67,19 +67,27 @@ public class PoliticalSpeechService {
     }
 
     private boolean validateInputDataFromCsv(List<PoliticalInformation> politicalInformationList) {
-//        politicalInformationList.stream()
-//                .map(politicalInformation -> StringUtils.isBlank(politicalInformation.getSpeakerName()))
+
         for (PoliticalInformation validateDateField : politicalInformationList) {
+
             if(StringUtils.isBlank(validateDateField.getSpeakerName()))
                 return false;
+            validateDateField.setSpeakerName(validateDateField.getSpeakerName().trim());
+
             if(StringUtils.isBlank(validateDateField.getSpeakerTopic()))
                 return false;
+            validateDateField.setSpeakerTopic(validateDateField.getSpeakerTopic().trim());
+
             if(StringUtils.isBlank(validateDateField.getDateOfSpeech()))
                 return false;
+            validateDateField.setDateOfSpeech(validateDateField.getDateOfSpeech().trim());
             if(!dateValidation.isValid(validateDateField.getDateOfSpeech()))
                 return false;
-            if(StringUtils.isBlank(validateDateField.getNumberOfWordsSpoken()) ||
-                    !StringUtils.isNumeric(validateDateField.getNumberOfWordsSpoken()))
+
+            if(StringUtils.isBlank(validateDateField.getNumberOfWordsSpoken()))
+                return false;
+            validateDateField.setNumberOfWordsSpoken(validateDateField.getNumberOfWordsSpoken().trim());
+            if (!StringUtils.isNumeric(validateDateField.getNumberOfWordsSpoken()))
                 return false;
         }
         return true;

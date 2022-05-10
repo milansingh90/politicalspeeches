@@ -17,7 +17,7 @@ public class DateValidation implements DateValidator {
     @Override
     public boolean isValid(String dateStr) {
         try {
-            LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
+            LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } catch (DateTimeParseException e) {
             return false;
         }

@@ -25,10 +25,10 @@ public class FileHostingController {
     public void getPoliticalSpeechesCsvTest(HttpServletResponse response) throws IOException {
         response.setContentType("text/plain; charset=utf-8");
         response.getWriter().print("\"Speaker, Topic, Date, Words\"\n" +
-                "\"Alexander Abel, Education Policy,2012-10-30,5310\"\n" +
-                "\"Bernhard Belling, Coal Subsidies,2012-11-05,1210\"\n" +
-                "\"Caesare Collins, Coal Subsidies,2012-11-06,1119\"\n" +
-                "\"Alexander Abel, Internal Security,2012-12-11,911\"\n"+
-                "\"Caesare Collins, Education Policy,2013-10-30,abcd\"\n");
+                "\"Alexander Abel,     Education Policy, 2012-10-30, 5310\"\n" +
+                "\"Bernhard Belling, Coal Subsidies, 2012-11-05, 1210\"\n" +
+                "\"Caesare Collins, Coal Subsidies, 2012-11-06, 1119\"\n" +
+                "\"Alexander Abel, Internal Security, 2012-12-11, 911\"\n"+
+                "\"Caesare Collins, Education Policy, 2013-10-30, 1234\"\n");
     }
 }
