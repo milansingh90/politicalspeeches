@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: politicalspeeches-deployment
+  labels:
+    app: PoliticalSpeeches
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: politicalspeeches
+  template:
+    metadata:
+      labels:
+        app: politicalspeeches
+    spec:
+      containers:
+        - name: politicalspeeches
+          image: politicalspeeches:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
