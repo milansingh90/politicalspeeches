@@ -17,7 +17,8 @@ public class PoliticalSpeechesStepDefinitions {
 
     ResponseEntity response;
     @Autowired
-    private PoliticialSpeechesClient politicialSpeechesClient;
+    private PoliticalSpeechesClient politicialSpeechesClient;
+
     @When("the client calls url {string}")
     public void the_client_calls_url(String url) throws Throwable  {
         response = politicialSpeechesClient.get(url);

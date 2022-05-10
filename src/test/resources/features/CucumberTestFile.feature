@@ -6,8 +6,8 @@ Feature: Analytics information on political speeches can be retrieved
     And the client receives information about the data "<urls>"
 
     Examples:
-      | urls                                                                      | Scenarios                                   |
-      | url=http://localhost:9095/fileHosting/politicalSpeech.csv                 | Valid url with one input url is passed     |
+      | urls                                            | Scenarios                                  |
+      | fileHosting/politicalSpeech.csv                 | Valid url with one input url is passed     |
 
 
   Scenario Outline: Client makes call to GET using url
@@ -16,5 +16,5 @@ Feature: Analytics information on political speeches can be retrieved
     And the client receives message as response
 
     Examples:
-      | urls                                                                          | Scenarios                                   |
-      | url=http://localhost:9095/fileHosting/politicalSpeechInvalid.csv              | Valid url with invalid input passed     |
+      | urls                                                | Scenarios                               |
+      | fileHosting/politicalSpeechInvalid.csv              | Valid url with invalid input passed     |
