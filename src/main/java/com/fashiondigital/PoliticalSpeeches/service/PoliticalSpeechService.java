@@ -25,11 +25,11 @@ public class PoliticalSpeechService {
     @Autowired
     PoliticalInformationRepository politicalInformationRepository;
 
-    private final DateValidation dateValidation = new DateValidation();
+    @Autowired
+    RestTemplate restTemplate;
 
     public ResponseDto parseInputFile(List<String> urlList) throws CustomErrorException {
         for(String url:urlList) {
-            RestTemplate restTemplate = new RestTemplate();
 
             List<PoliticalInformation> politicalInformationList = restTemplate.execute(url, HttpMethod.GET, null, clientHttpResponse -> {
                 InputStreamReader reader = new InputStreamReader(clientHttpResponse.getBody());
@@ -41,33 +41,14 @@ public class PoliticalSpeechService {
                         .build();
                 return csvToBean.stream().collect(Collectors.toList());
             });
-
-            int[] countInsertedRecords;
-            if (politicalInformationList != null) {
-
-                if(validateInputDataFromCsv(politicalInformationList)) {
-                    countInsertedRecords = politicalInformationRepository.addAllInformation(politicalInformationList);
-                    if(countInsertedRecords.length < 1)
-                        throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Empty input file");
-                } else
-                    throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Invalid data in input file");
-            }else
-                throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Input file is empty");
+            validateInputFile(politicalInformationList);
         }
-        ResponseDto responseDto = new ResponseDto();
-
-        Optional<String> speakerNameMostSpeeches = politicalInformationRepository.getSpeakerNameWithCountOfMostSpeeches();
-        speakerNameMostSpeeches.ifPresent(responseDto::setMostSpeeches);
-        Optional<String> speakerNameSpeakerTopics = politicalInformationRepository.getSpeakerNameWithCountOfMostSpeechesOnInternalSecurityTopic();
-        speakerNameSpeakerTopics.ifPresent(responseDto::setMostSecurity);
-        Optional<String> speakerNameLeastWords =politicalInformationRepository.getSpeakerNameWhoSpokeLeastNumberOfWords();
-        speakerNameLeastWords.ifPresent(responseDto::setLeastWordy);
-
-        return responseDto;
+        return prepareResponse();
     }
 
     private boolean validateInputDataFromCsv(List<PoliticalInformation> politicalInformationList) {
 
+        DateValidation dateValidation = new DateValidation();
         for (PoliticalInformation validateDateField : politicalInformationList) {
 
             if(StringUtils.isBlank(validateDateField.getSpeakerName()))
@@ -91,5 +72,31 @@ public class PoliticalSpeechService {
                 return false;
         }
         return true;
+    }
+
+    private ResponseDto prepareResponse() {
+        ResponseDto responseDto = new ResponseDto();
+
+        Optional<String> speakerNameMostSpeeches = politicalInformationRepository.getSpeakerNameWithCountOfMostSpeeches();
+        speakerNameMostSpeeches.ifPresent(responseDto::setMostSpeeches);
+        Optional<String> speakerNameSpeakerTopics = politicalInformationRepository.getSpeakerNameWithCountOfMostSpeechesOnInternalSecurityTopic();
+        speakerNameSpeakerTopics.ifPresent(responseDto::setMostSecurity);
+        Optional<String> speakerNameLeastWords =politicalInformationRepository.getSpeakerNameWhoSpokeLeastNumberOfWords();
+        speakerNameLeastWords.ifPresent(responseDto::setLeastWordy);
+        return responseDto;
+    }
+
+    private void validateInputFile(List<PoliticalInformation> politicalInformationList) {
+        int[] countInsertedRecords;
+        if (politicalInformationList != null) {
+
+            if(validateInputDataFromCsv(politicalInformationList)) {
+                countInsertedRecords = politicalInformationRepository.addAllInformation(politicalInformationList);
+                if(countInsertedRecords.length < 1)
+                    throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Empty input file");
+            } else
+                throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Invalid data in input file");
+        }else
+            throw new CustomErrorException(HttpStatus.BAD_REQUEST,"Input file is empty");
     }
 }

@@ -1,6 +1,7 @@
 package com.fashiondigital.PoliticalSpeeches.model;
 
 import com.opencsv.bean.CsvBindByPosition;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
@@ -8,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @Validated
+@Builder
 public class PoliticalInformation {
     @CsvBindByPosition(position = 0)
     private String speakerName;
